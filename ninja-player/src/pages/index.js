@@ -5,7 +5,7 @@ import GameList from "@/components/Home/GameList";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import app from "@/shared/FirebaseConfig";
 import { useEffect, useState } from "react";
-import Posts from "@/components/Posts";
+import Posts from "@/components/Home/Posts";
 
 const inter = Inter({ subsets: ["latin"] });
 
