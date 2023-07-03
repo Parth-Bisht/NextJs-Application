@@ -14,7 +14,6 @@ export default function Home() {
   const getPost = async (db) => {
     const querySnapshot = await getDocs(collection(db, "posts"));
     querySnapshot.forEach((doc) => {
-      // console.log(doc.id, " => ", doc.data());
       setPosts((posts) => [...posts, doc.data()]);
     });
   };

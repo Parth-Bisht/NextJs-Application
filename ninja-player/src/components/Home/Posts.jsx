@@ -11,6 +11,7 @@ const Posts = ({ posts }) => {
         {posts.map((item, ind) => (
           <div
             key={ind}
+            className="cursor-pointer"
             onClick={() => {
               setPost(item);
               window.my_modal_1.showModal();
