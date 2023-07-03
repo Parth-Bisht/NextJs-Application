@@ -6,11 +6,10 @@ const GameList = () => {
   useEffect(() => {
     setGames(Data.GameList);
   }, []);
-  console.log(games);
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 mt-4">
-      {games.map((item) => (
-        <div className="flex flex-col items-center cursor-pointer">
+      {games.map((item, ind) => (
+        <div key={ind} className="flex flex-col items-center cursor-pointer">
           <img
             src={item.image}
             alt="game"
