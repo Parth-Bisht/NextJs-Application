@@ -2,6 +2,8 @@ import React from "react";
 import { HiOutlineLocationMarker, HiOutlineCalendar } from "react-icons/hi";
 import UserInfo from "./UserInfo";
 
+const Placeholder = "/Images/placeholder.jpg";
+
 const PostItem = ({ post, modal = false }) => {
   //   console.log(post);
   return (
@@ -10,7 +12,7 @@ const PostItem = ({ post, modal = false }) => {
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow ">
           <img
             className="rounded-t-lg w-full h-[180px]"
-            src={post.image}
+            src={post.image ? post.image : Placeholder}
             alt=""
           />
 

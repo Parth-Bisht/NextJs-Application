@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Data from "@/shared/Data";
 import { useSession } from "next-auth/react";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import app from "@/shared/FirebaseConfig";
 
 const Form = () => {
@@ -9,12 +10,16 @@ const Form = () => {
   const [file, setFile] = useState();
   const { data: session } = useSession();
   const [db, setDb] = useState();
+  const [storage, setStorage] = useState();
+  const [submit, setSubmit] = useState(false);
   //   const db = getFirestore(app);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const db = getFirestore(app);
+      const storage = getStorage(app);
       setDb(db);
+      setStorage(storage);
     }
   }, []);
 
@@ -23,6 +28,12 @@ const Form = () => {
     setInputs((values) => ({ ...values, userImage: session.user.image }));
     setInputs((values) => ({ ...values, email: session.user.email }));
   }, [session]);
+
+  useEffect(() => {
+    if (submit == true) {
+      savePost();
+    }
+  }, [submit]);
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -31,7 +42,22 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(inputs);
+    // await setDoc(doc(db, "posts", Date.now().toString()), inputs);
+    const storageRef = ref(storage, "ninja-player/" + file?.name);
+    uploadBytes(storageRef, file)
+      .then((snapshot) => {
+        console.log("Uploaded a blob or file");
+      })
+      .then((resp) => {
+        getDownloadURL(storageRef).then(async (url) => {
+          setInputs((values) => ({ ...values, image: url }));
+          setSubmit(true);
+        });
+      });
+  };
+  const savePost = async () => {
     await setDoc(doc(db, "posts", Date.now().toString()), inputs);
+    console.log(inputs);
   };
   return (
     <div>
