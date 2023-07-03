@@ -46,13 +46,16 @@ const Header = () => {
             <IoLogInOutline className="sm:hidden text-[20px]" />
           </button>
         )}
-        <Image
-          src={session ? session?.user?.image : USER_IMAGE}
-          alt="user"
-          width={45}
-          height={40}
-          className="rounded-full"
-        />
+        {session ? (
+          <Image
+            src={session ? session?.user?.image : USER_IMAGE}
+            alt="user"
+            width={45}
+            height={40}
+            className="rounded-full cursor-pointer"
+            onClick={() => router.push("/profile")}
+          />
+        ) : null}
       </div>
     </div>
   );

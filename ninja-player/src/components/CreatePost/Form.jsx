@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import app from "@/shared/FirebaseConfig";
+import Toast from "../Toast";
 
 const Form = () => {
   const [inputs, setInputs] = useState({});
@@ -12,7 +13,7 @@ const Form = () => {
   const [db, setDb] = useState();
   const [storage, setStorage] = useState();
   const [submit, setSubmit] = useState(false);
-  //   const db = getFirestore(app);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -24,9 +25,11 @@ const Form = () => {
   }, []);
 
   useEffect(() => {
-    setInputs((values) => ({ ...values, userName: session.user.name }));
-    setInputs((values) => ({ ...values, userImage: session.user.image }));
-    setInputs((values) => ({ ...values, email: session.user.email }));
+    if (session) {
+      setInputs((values) => ({ ...values, userName: session.user.name }));
+      setInputs((values) => ({ ...values, userImage: session.user.image }));
+      setInputs((values) => ({ ...values, email: session.user.email }));
+    }
   }, [session]);
 
   useEffect(() => {
@@ -41,8 +44,7 @@ const Form = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(inputs);
-    // await setDoc(doc(db, "posts", Date.now().toString()), inputs);
+    setShowToast(true);
     const storageRef = ref(storage, "ninja-player/" + file?.name);
     uploadBytes(storageRef, file)
       .then((snapshot) => {
@@ -57,10 +59,17 @@ const Form = () => {
   };
   const savePost = async () => {
     await setDoc(doc(db, "posts", Date.now().toString()), inputs);
-    console.log(inputs);
   };
   return (
-    <div>
+    <div className="mt-4">
+      {showToast ? (
+        <div className="absolute top-10 right-10">
+          <Toast
+            msg={"Post Created Successfully"}
+            closeToast={() => setShowToast(false)}
+          />
+        </div>
+      ) : null}
       <form onSubmit={handleSubmit}>
         <input
           type="text"

@@ -15,6 +15,7 @@ const PostItem = ({ post, modal = false }) => {
             src={post.image ? post.image : Placeholder}
             alt=""
           />
+          {/* <Image src={post.image} alt="image" width={100} height={100} /> */}
 
           <div className="p-5">
             <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 ">

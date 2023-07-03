@@ -3,6 +3,7 @@ import PostItem from "./PostItem";
 import PostModal from "./PostModal";
 
 const Posts = ({ posts }) => {
+  console.log(posts);
   const [post, setPost] = useState();
   return (
     <div>
